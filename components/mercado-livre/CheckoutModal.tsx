@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { X, Loader2, MapPin, Clock } from "lucide-react"
+import { X, Loader2, MapPin, Clock, Copy, Check } from "lucide-react"
 
 interface CheckoutModalProps {
   isOpen: boolean
@@ -12,6 +12,8 @@ export function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
   const [step, setStep] = useState<"address" | "pix">("address")
   const [isLoading, setIsLoading] = useState(false)
   const [timeLeft, setTimeLeft] = useState(600) // 10 minutos em segundos
+  const [copied, setCopied] = useState(false)
+  const pixCode = "00020126580014br.gov.bcb.pix0136123e4567-e89b-12d3-a456-426614174000"
   const [formData, setFormData] = useState({
     nome: "",
     telefone: "",
@@ -79,7 +81,18 @@ export function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
   const handleClose = () => {
     setStep("address")
     setTimeLeft(600)
+    setCopied(false)
     onClose()
+  }
+
+  const handleCopyPix = async () => {
+    try {
+      await navigator.clipboard.writeText(pixCode)
+      setCopied(true)
+      setTimeout(() => setCopied(false), 3000)
+    } catch (err) {
+      console.error("Erro ao copiar:", err)
+    }
   }
 
   if (!isOpen) return null
@@ -311,7 +324,7 @@ export function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
           {/* Header */}
           <div className="flex items-center justify-between px-4 py-4 border-b border-gray-100">
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 bg-[#3483FA] rounded-full flex items-center justify-center">
+              <div className="w-8 h-8 bg-[#32BCAD] rounded-full flex items-center justify-center">
                 <span className="text-white font-bold text-sm">P</span>
               </div>
               <span className="font-medium text-gray-800">Pagar com PIX</span>
@@ -326,32 +339,115 @@ export function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
 
           {/* Content */}
           <div className="p-6">
-            {/* Total */}
-            <div className="text-center mb-6">
-              <p className="text-sm text-gray-500 mb-1">Total a pagar</p>
-              <p className="text-4xl font-bold text-[#3483FA]">R$ 64,90</p>
-            </div>
-
             {/* QR Code */}
-            <div className="flex justify-center mb-6">
-              <div className="bg-gray-100 rounded-xl p-4 border-2 border-dashed border-gray-300">
-                <div className="w-40 h-40 bg-white rounded-lg flex items-center justify-center">
-                  {/* QR Code Pattern */}
-                  <div className="grid grid-cols-5 gap-1">
-                    {[...Array(25)].map((_, i) => (
-                      <div
-                        key={i}
-                        className={`w-5 h-5 rounded-sm ${
-                          [0, 1, 2, 3, 4, 5, 9, 10, 14, 15, 19, 20, 21, 22, 23, 24].includes(i)
-                            ? "bg-gray-800"
-                            : "bg-gray-300"
-                        }`}
-                      />
-                    ))}
-                  </div>
+            <div className="flex justify-center mb-4">
+              <div className="bg-white rounded-lg p-2 border border-gray-200">
+                <div className="w-48 h-48 bg-white flex items-center justify-center">
+                  {/* QR Code Pattern mais realista */}
+                  <svg viewBox="0 0 100 100" className="w-full h-full">
+                    <rect fill="white" width="100" height="100"/>
+                    {/* QR Code pattern */}
+                    <g fill="black">
+                      {/* Top-left finder */}
+                      <rect x="5" y="5" width="20" height="20"/>
+                      <rect x="8" y="8" width="14" height="14" fill="white"/>
+                      <rect x="11" y="11" width="8" height="8"/>
+                      
+                      {/* Top-right finder */}
+                      <rect x="75" y="5" width="20" height="20"/>
+                      <rect x="78" y="8" width="14" height="14" fill="white"/>
+                      <rect x="81" y="11" width="8" height="8"/>
+                      
+                      {/* Bottom-left finder */}
+                      <rect x="5" y="75" width="20" height="20"/>
+                      <rect x="8" y="78" width="14" height="14" fill="white"/>
+                      <rect x="11" y="81" width="8" height="8"/>
+                      
+                      {/* Data modules */}
+                      <rect x="30" y="5" width="4" height="4"/>
+                      <rect x="38" y="5" width="4" height="4"/>
+                      <rect x="46" y="5" width="4" height="4"/>
+                      <rect x="54" y="5" width="4" height="4"/>
+                      <rect x="62" y="5" width="4" height="4"/>
+                      
+                      <rect x="30" y="13" width="4" height="4"/>
+                      <rect x="42" y="13" width="4" height="4"/>
+                      <rect x="50" y="13" width="4" height="4"/>
+                      <rect x="62" y="13" width="4" height="4"/>
+                      
+                      <rect x="30" y="30" width="4" height="4"/>
+                      <rect x="38" y="30" width="4" height="4"/>
+                      <rect x="46" y="30" width="4" height="4"/>
+                      <rect x="54" y="30" width="4" height="4"/>
+                      <rect x="62" y="30" width="4" height="4"/>
+                      <rect x="70" y="30" width="4" height="4"/>
+                      
+                      <rect x="30" y="38" width="4" height="4"/>
+                      <rect x="42" y="38" width="4" height="4"/>
+                      <rect x="54" y="38" width="4" height="4"/>
+                      <rect x="66" y="38" width="4" height="4"/>
+                      <rect x="78" y="38" width="4" height="4"/>
+                      
+                      <rect x="30" y="46" width="4" height="4"/>
+                      <rect x="38" y="46" width="4" height="4"/>
+                      <rect x="50" y="46" width="4" height="4"/>
+                      <rect x="58" y="46" width="4" height="4"/>
+                      <rect x="70" y="46" width="4" height="4"/>
+                      
+                      <rect x="30" y="54" width="4" height="4"/>
+                      <rect x="46" y="54" width="4" height="4"/>
+                      <rect x="54" y="54" width="4" height="4"/>
+                      <rect x="66" y="54" width="4" height="4"/>
+                      <rect x="78" y="54" width="4" height="4"/>
+                      
+                      <rect x="30" y="62" width="4" height="4"/>
+                      <rect x="38" y="62" width="4" height="4"/>
+                      <rect x="50" y="62" width="4" height="4"/>
+                      <rect x="62" y="62" width="4" height="4"/>
+                      <rect x="74" y="62" width="4" height="4"/>
+                      
+                      <rect x="30" y="70" width="4" height="4"/>
+                      <rect x="42" y="70" width="4" height="4"/>
+                      <rect x="54" y="70" width="4" height="4"/>
+                      <rect x="66" y="70" width="4" height="4"/>
+                      <rect x="82" y="70" width="4" height="4"/>
+                      
+                      <rect x="30" y="78" width="4" height="4"/>
+                      <rect x="38" y="78" width="4" height="4"/>
+                      <rect x="46" y="78" width="4" height="4"/>
+                      <rect x="58" y="78" width="4" height="4"/>
+                      <rect x="70" y="78" width="4" height="4"/>
+                      <rect x="82" y="78" width="4" height="4"/>
+                      
+                      <rect x="30" y="86" width="4" height="4"/>
+                      <rect x="42" y="86" width="4" height="4"/>
+                      <rect x="50" y="86" width="4" height="4"/>
+                      <rect x="62" y="86" width="4" height="4"/>
+                      <rect x="74" y="86" width="4" height="4"/>
+                      <rect x="86" y="86" width="4" height="4"/>
+                    </g>
+                  </svg>
                 </div>
               </div>
             </div>
+
+            {/* Copy Button */}
+            <button
+              onClick={handleCopyPix}
+              className="w-full bg-[#3483FA] hover:bg-[#2968c8] text-white font-medium py-4 rounded-lg transition-colors flex items-center justify-center gap-2 mb-4"
+            >
+              {copied ? (
+                <>
+                  <Check className="w-5 h-5" />
+                  <span>Codigo copiado!</span>
+                </>
+              ) : (
+                <>
+                  <Copy className="w-5 h-5" />
+                  <span>Copiar codigo</span>
+                </>
+              )}
+            </button>
 
             {/* Timer Warning */}
             <div className="bg-[#FFF3CD] rounded-lg px-4 py-3 flex items-center gap-3">
