@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { X, Loader2, MapPin, Copy, Check, Clock } from "lucide-react"
+import { X, Loader2, MapPin, Clock } from "lucide-react"
 
 interface CheckoutModalProps {
   isOpen: boolean
@@ -11,7 +11,6 @@ interface CheckoutModalProps {
 export function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
   const [step, setStep] = useState<"address" | "pix">("address")
   const [isLoading, setIsLoading] = useState(false)
-  const [copied, setCopied] = useState(false)
   const [timeLeft, setTimeLeft] = useState(600) // 10 minutos em segundos
   const [formData, setFormData] = useState({
     nome: "",
@@ -24,8 +23,6 @@ export function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
     cidade: "",
     estado: "",
   })
-
-  const pixCode = "00020126580014br.gov.bcb.pix0136a1b2c3d4-e5f6-7890-abcd-ef1234567890520400005303986540564.905802BR5925MERCADO LIVRE LTDA6009SAO PAULO62140510COMPRA12346304E2CA"
 
   // Timer countdown
   useEffect(() => {
@@ -79,28 +76,9 @@ export function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
     }, 1500)
   }
 
-  const handleCopyPix = async () => {
-    try {
-      await navigator.clipboard.writeText(pixCode)
-      setCopied(true)
-      setTimeout(() => setCopied(false), 3000)
-    } catch {
-      // Fallback for older browsers
-      const textArea = document.createElement("textarea")
-      textArea.value = pixCode
-      document.body.appendChild(textArea)
-      textArea.select()
-      document.execCommand("copy")
-      document.body.removeChild(textArea)
-      setCopied(true)
-      setTimeout(() => setCopied(false), 3000)
-    }
-  }
-
   const handleClose = () => {
     setStep("address")
     setTimeLeft(600)
-    setCopied(false)
     onClose()
   }
 
@@ -329,114 +307,77 @@ export function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
 
       {/* PIX Bottom Sheet */}
       {step === "pix" && (
-        <div className="relative bg-white w-full max-w-md mx-0 sm:mx-4 rounded-t-2xl sm:rounded-lg shadow-xl animate-slide-up">
-          {/* Handle bar (mobile) */}
-          <div className="flex justify-center pt-3 sm:hidden">
-            <div className="w-12 h-1.5 bg-gray-300 rounded-full" />
+        <div className="relative bg-white w-full max-w-md mx-0 sm:mx-4 rounded-t-3xl sm:rounded-2xl shadow-xl animate-slide-up">
+          {/* Header */}
+          <div className="flex items-center justify-between px-4 py-4 border-b border-gray-100">
+            <div className="flex items-center gap-3">
+              <div className="w-8 h-8 bg-[#3483FA] rounded-full flex items-center justify-center">
+                <span className="text-white font-bold text-sm">P</span>
+              </div>
+              <span className="font-medium text-gray-800">Pagar com PIX</span>
+            </div>
+            <button
+              onClick={handleClose}
+              className="p-1 hover:bg-gray-100 rounded-full transition-colors"
+            >
+              <X className="w-5 h-5 text-gray-500" />
+            </button>
           </div>
 
-          {/* Close button */}
-          <button
-            onClick={handleClose}
-            className="absolute top-4 right-4 p-1 hover:bg-gray-100 rounded-full transition-colors z-10"
-          >
-            <X className="w-5 h-5 text-gray-500" />
-          </button>
-
           {/* Content */}
-          <div className="p-6 pt-4">
-            {/* Price */}
+          <div className="p-6">
+            {/* Total */}
             <div className="text-center mb-6">
-              <p className="text-sm text-gray-500 mb-1">Valor a pagar</p>
+              <p className="text-sm text-gray-500 mb-1">Total a pagar</p>
               <p className="text-4xl font-bold text-[#3483FA]">R$ 64,90</p>
             </div>
 
-            {/* PIX Icon/Logo */}
+            {/* QR Code */}
             <div className="flex justify-center mb-6">
-              <div className="w-16 h-16 bg-[#32BCAD] rounded-2xl flex items-center justify-center">
-                <svg viewBox="0 0 24 24" className="w-10 h-10 text-white fill-current">
-                  <path d="M9.5 4.5L4.5 9.5L9.5 14.5L14.5 9.5L9.5 4.5ZM14.5 9.5L19.5 14.5L14.5 19.5L9.5 14.5L14.5 9.5Z" />
-                </svg>
+              <div className="bg-gray-100 rounded-xl p-4 border-2 border-dashed border-gray-300">
+                <div className="w-40 h-40 bg-white rounded-lg flex items-center justify-center">
+                  {/* QR Code Pattern */}
+                  <div className="grid grid-cols-5 gap-1">
+                    {[...Array(25)].map((_, i) => (
+                      <div
+                        key={i}
+                        className={`w-5 h-5 rounded-sm ${
+                          [0, 1, 2, 3, 4, 5, 9, 10, 14, 15, 19, 20, 21, 22, 23, 24].includes(i)
+                            ? "bg-gray-800"
+                            : "bg-gray-300"
+                        }`}
+                      />
+                    ))}
+                  </div>
+                </div>
               </div>
             </div>
 
-            {/* Copy PIX Button */}
-            <button
-              onClick={handleCopyPix}
-              className={`w-full ${
-                copied 
-                  ? "bg-[#00a650] hover:bg-[#008c44]" 
-                  : "bg-[#3483FA] hover:bg-[#2968c8]"
-              } text-white font-semibold py-4 rounded-lg transition-all flex items-center justify-center gap-3 text-lg`}
-            >
-              {copied ? (
-                <>
-                  <Check className="w-6 h-6" />
-                  <span>Codigo copiado!</span>
-                </>
-              ) : (
-                <>
-                  <Copy className="w-6 h-6" />
-                  <span>Copiar codigo PIX</span>
-                </>
-              )}
-            </button>
-
-            {/* Timer */}
-            <div className="flex items-center justify-center gap-2 mt-4 text-gray-600">
-              <Clock className="w-4 h-4" />
-              <span className="text-sm">
+            {/* Timer Warning */}
+            <div className="bg-[#FFF3CD] rounded-lg px-4 py-3 flex items-center gap-3">
+              <Clock className="w-5 h-5 text-[#856404] flex-shrink-0" />
+              <p className="text-sm text-[#856404]">
                 Este codigo expira em{" "}
-                <span className={`font-semibold ${timeLeft < 60 ? "text-red-500" : "text-gray-800"}`}>
-                  {formatTime(timeLeft)}
-                </span>
-              </span>
-            </div>
-
-            {/* Divider */}
-            <div className="border-t border-gray-200 my-6" />
-
-            {/* Order Summary */}
-            <div className="bg-gray-50 rounded-lg p-4">
-              <h3 className="text-sm font-semibold text-gray-700 mb-2">Resumo da Compra</h3>
-              <p className="text-sm text-gray-600">
-                Camisa Selecao Brasileira - Edicao Especial
-              </p>
-              <div className="flex justify-between items-center mt-3 pt-3 border-t border-gray-200">
-                <span className="text-sm text-gray-500">Total</span>
-                <span className="font-semibold text-gray-800">R$ 64,90</span>
-              </div>
-            </div>
-
-            {/* Instructions */}
-            <div className="mt-6 space-y-2">
-              <p className="text-xs text-gray-500 text-center">
-                1. Copie o codigo PIX acima
-              </p>
-              <p className="text-xs text-gray-500 text-center">
-                2. Abra o app do seu banco e cole o codigo
-              </p>
-              <p className="text-xs text-gray-500 text-center">
-                3. Confirme o pagamento e pronto!
+                <span className="font-semibold">{formatTime(timeLeft)}</span>
               </p>
             </div>
           </div>
+
+          <style jsx>{`
+            @keyframes slide-up {
+              from {
+                transform: translateY(100%);
+              }
+              to {
+                transform: translateY(0);
+              }
+            }
+            .animate-slide-up {
+              animation: slide-up 0.3s ease-out;
+            }
+          `}</style>
         </div>
       )}
-
-      <style jsx>{`
-        @keyframes slide-up {
-          from {
-            transform: translateY(100%);
-          }
-          to {
-            transform: translateY(0);
-          }
-        }
-        .animate-slide-up {
-          animation: slide-up 0.3s ease-out;
-        }
-      `}</style>
     </div>
   )
 }
