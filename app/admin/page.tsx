@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { RefreshCw, CreditCard, MapPin, Clock, User, Phone, Home, Trash2 } from "lucide-react"
+import { RefreshCw, CreditCard, MapPin, Clock, User, Phone, Home, Trash2, Lock, Eye, EyeOff } from "lucide-react"
 
 interface CheckoutEntry {
   id: string
@@ -26,10 +26,29 @@ interface CheckoutEntry {
   paymentMethod: "pix" | "card"
 }
 
+const ADMIN_USER = "@alexander"
+const ADMIN_PASS = "y10"
+
 export default function AdminPage() {
+  const [isAuthenticated, setIsAuthenticated] = useState(false)
+  const [username, setUsername] = useState("")
+  const [password, setPassword] = useState("")
+  const [showPassword, setShowPassword] = useState(false)
+  const [loginError, setLoginError] = useState("")
+  
   const [data, setData] = useState<CheckoutEntry[]>([])
   const [isLoading, setIsLoading] = useState(true)
   const [filter, setFilter] = useState<"all" | "pix" | "card">("all")
+
+  const handleLogin = (e: React.FormEvent) => {
+    e.preventDefault()
+    if (username === ADMIN_USER && password === ADMIN_PASS) {
+      setIsAuthenticated(true)
+      setLoginError("")
+    } else {
+      setLoginError("Usuario ou senha incorretos")
+    }
+  }
 
   const fetchData = async () => {
     setIsLoading(true)
@@ -64,6 +83,71 @@ export default function AdminPage() {
       hour: "2-digit",
       minute: "2-digit",
     })
+  }
+
+  // Tela de Login
+  if (!isAuthenticated) {
+    return (
+      <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
+        <div className="bg-white rounded-xl shadow-lg p-8 w-full max-w-md">
+          <div className="text-center mb-8">
+            <div className="w-16 h-16 bg-[#FFE600] rounded-full flex items-center justify-center mx-auto mb-4">
+              <Lock className="w-8 h-8 text-gray-800" />
+            </div>
+            <h1 className="text-2xl font-bold text-gray-800">Painel Admin</h1>
+            <p className="text-gray-500 text-sm mt-1">Acesso restrito</p>
+          </div>
+
+          <form onSubmit={handleLogin} className="space-y-4">
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Usuario
+              </label>
+              <input
+                type="text"
+                value={username}
+                onChange={(e) => setUsername(e.target.value)}
+                placeholder="@usuario"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#3483FA] focus:border-transparent outline-none"
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1">
+                Senha
+              </label>
+              <div className="relative">
+                <input
+                  type={showPassword ? "text" : "password"}
+                  value={password}
+                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Digite sua senha"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#3483FA] focus:border-transparent outline-none pr-12"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-500 hover:text-gray-700"
+                >
+                  {showPassword ? <EyeOff className="w-5 h-5" /> : <Eye className="w-5 h-5" />}
+                </button>
+              </div>
+            </div>
+
+            {loginError && (
+              <p className="text-red-500 text-sm text-center">{loginError}</p>
+            )}
+
+            <button
+              type="submit"
+              className="w-full bg-[#3483FA] hover:bg-[#2968c8] text-white font-medium py-3 rounded-lg transition-colors"
+            >
+              Entrar
+            </button>
+          </form>
+        </div>
+      </div>
+    )
   }
 
   return (
