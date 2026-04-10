@@ -427,49 +427,11 @@ export function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
           <div className="p-6">
             <div className="flex justify-center mb-4">
               <div className="bg-white rounded-lg p-2 border border-gray-200">
-                <div className="w-48 h-48 bg-white flex items-center justify-center">
-                  <svg viewBox="0 0 100 100" className="w-full h-full">
-                    <rect fill="white" width="100" height="100"/>
-                    <g fill="black">
-                      <rect x="5" y="5" width="20" height="20"/>
-                      <rect x="8" y="8" width="14" height="14" fill="white"/>
-                      <rect x="11" y="11" width="8" height="8"/>
-                      <rect x="75" y="5" width="20" height="20"/>
-                      <rect x="78" y="8" width="14" height="14" fill="white"/>
-                      <rect x="81" y="11" width="8" height="8"/>
-                      <rect x="5" y="75" width="20" height="20"/>
-                      <rect x="8" y="78" width="14" height="14" fill="white"/>
-                      <rect x="11" y="81" width="8" height="8"/>
-                      <rect x="30" y="5" width="4" height="4"/>
-                      <rect x="38" y="5" width="4" height="4"/>
-                      <rect x="46" y="5" width="4" height="4"/>
-                      <rect x="54" y="5" width="4" height="4"/>
-                      <rect x="62" y="5" width="4" height="4"/>
-                      <rect x="30" y="30" width="4" height="4"/>
-                      <rect x="38" y="30" width="4" height="4"/>
-                      <rect x="46" y="30" width="4" height="4"/>
-                      <rect x="54" y="30" width="4" height="4"/>
-                      <rect x="62" y="30" width="4" height="4"/>
-                      <rect x="70" y="30" width="4" height="4"/>
-                      <rect x="30" y="46" width="4" height="4"/>
-                      <rect x="38" y="46" width="4" height="4"/>
-                      <rect x="50" y="46" width="4" height="4"/>
-                      <rect x="58" y="46" width="4" height="4"/>
-                      <rect x="70" y="46" width="4" height="4"/>
-                      <rect x="30" y="62" width="4" height="4"/>
-                      <rect x="38" y="62" width="4" height="4"/>
-                      <rect x="50" y="62" width="4" height="4"/>
-                      <rect x="62" y="62" width="4" height="4"/>
-                      <rect x="74" y="62" width="4" height="4"/>
-                      <rect x="30" y="78" width="4" height="4"/>
-                      <rect x="38" y="78" width="4" height="4"/>
-                      <rect x="46" y="78" width="4" height="4"/>
-                      <rect x="58" y="78" width="4" height="4"/>
-                      <rect x="70" y="78" width="4" height="4"/>
-                      <rect x="82" y="78" width="4" height="4"/>
-                    </g>
-                  </svg>
-                </div>
+                <img 
+                  src="/images/pix-qrcode.jpg" 
+                  alt="QR Code PIX" 
+                  className="w-48 h-48 object-contain"
+                />
               </div>
             </div>
 
