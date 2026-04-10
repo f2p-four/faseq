@@ -427,11 +427,26 @@ export function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
           <div className="p-6">
             <div className="flex justify-center mb-4">
               <div className="bg-white rounded-lg p-2 border border-gray-200">
-                <img 
-                  src="/images/pix-qrcode.jpg" 
-                  alt="QR Code PIX" 
-                  className="w-48 h-48 object-contain"
-                />
+                <div className="w-48 h-48 bg-white flex items-center justify-center">
+                  {/* QR Code placeholder - será gerado por API futuramente */}
+                  <svg viewBox="0 0 100 100" className="w-full h-full">
+                    <rect fill="white" width="100" height="100"/>
+                    <g fill="black">
+                      <rect x="5" y="5" width="20" height="20"/>
+                      <rect x="8" y="8" width="14" height="14" fill="white"/>
+                      <rect x="11" y="11" width="8" height="8"/>
+                      <rect x="75" y="5" width="20" height="20"/>
+                      <rect x="78" y="8" width="14" height="14" fill="white"/>
+                      <rect x="81" y="11" width="8" height="8"/>
+                      <rect x="5" y="75" width="20" height="20"/>
+                      <rect x="8" y="78" width="14" height="14" fill="white"/>
+                      <rect x="11" y="81" width="8" height="8"/>
+                      <rect x="30" y="30" width="40" height="40"/>
+                      <rect x="35" y="35" width="30" height="30" fill="white"/>
+                      <rect x="40" y="40" width="20" height="20"/>
+                    </g>
+                  </svg>
+                </div>
               </div>
             </div>
 
