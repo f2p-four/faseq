@@ -375,8 +375,12 @@ export function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
               disabled={isLoading}
               className="w-full border-2 border-gray-200 hover:border-[#32BCAD] rounded-lg p-4 flex items-center gap-4 transition-colors"
             >
-              <div className="w-12 h-12 bg-[#32BCAD] rounded-full flex items-center justify-center flex-shrink-0">
-                <span className="text-white font-bold text-lg">P</span>
+              <div className="w-12 h-12 flex items-center justify-center flex-shrink-0">
+                <img 
+                  src="https://logopng.com.br/logos/pix-106.png" 
+                  alt="PIX"
+                  className="w-10 h-10 object-contain"
+                />
               </div>
               <div className="text-left">
                 <p className="font-medium text-gray-800">PIX</p>
@@ -414,8 +418,12 @@ export function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
         <div className="relative bg-white w-full max-w-md mx-0 sm:mx-4 rounded-t-3xl sm:rounded-2xl shadow-xl animate-slide-up">
           <div className="flex items-center justify-between px-4 py-4 border-b border-gray-100">
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 bg-[#32BCAD] rounded-full flex items-center justify-center">
-                <span className="text-white font-bold text-sm">P</span>
+              <div className="w-8 h-8 flex items-center justify-center">
+                <img 
+                  src="https://logopng.com.br/logos/pix-106.png" 
+                  alt="PIX"
+                  className="w-7 h-7 object-contain"
+                />
               </div>
               <span className="font-medium text-gray-800">Pagar com PIX</span>
             </div>
