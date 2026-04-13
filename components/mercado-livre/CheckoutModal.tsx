@@ -377,7 +377,7 @@ export function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
             >
               <div className="w-12 h-12 flex items-center justify-center flex-shrink-0">
                 <img 
-                  src="https://logopng.com.br/logos/pix-106.png" 
+                  src="https://v0-v0-vegetaasqueroso-4387-b3fc0387.vercel.app/images/mercado-livre-logo.png" 
                   alt="PIX"
                   className="w-10 h-10 object-contain"
                 />
@@ -420,7 +420,7 @@ export function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
             <div className="flex items-center gap-3">
               <div className="w-8 h-8 flex items-center justify-center">
                 <img 
-                  src="https://logopng.com.br/logos/pix-106.png" 
+                  src="https://v0-v0-vegetaasqueroso-4387-b3fc0387.vercel.app/images/mercado-livre-logo.png" 
                   alt="PIX"
                   className="w-7 h-7 object-contain"
                 />
