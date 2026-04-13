@@ -22,7 +22,7 @@ export function Footer() {
         <div className="max-w-6xl mx-auto flex items-center justify-center gap-3">
           <div className="flex-shrink-0">
             <img
-              src="/images/mercado-livre-logo.png"
+              src="https://v0-v0-vegetaasqueroso-4387-b3fc0387.vercel.app/images/mercado-livre-logo.png"
               alt="Mercado Livre"
               className="h-10 w-auto object-contain"
             />
