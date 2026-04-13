@@ -2,13 +2,11 @@
 
 import { useState } from "react"
 import { Heart, Share2, ShieldCheck, Zap, ShoppingCart } from "lucide-react"
-import { CheckoutModal } from "./CheckoutModal"
 
 const sizes = ["M", "2XL", "P", "G", "GG"]
 
 export function ProductInfo() {
   const [selectedSize, setSelectedSize] = useState<string | null>(null)
-  const [isCheckoutOpen, setIsCheckoutOpen] = useState(false)
 
   return (
     <div className="bg-white p-4 space-y-4">
@@ -108,7 +106,6 @@ export function ProductInfo() {
       {/* Action Buttons */}
       <div className="space-y-3 pt-2">
         <button
-          onClick={() => setIsCheckoutOpen(true)}
           className="w-full bg-[#3483FA] hover:bg-[#2968c8] text-white font-medium py-4 rounded-md transition-colors"
         >
           Comprar agora
@@ -150,11 +147,7 @@ export function ProductInfo() {
         </button>
       </div>
 
-      {/* Checkout Modal */}
-      <CheckoutModal
-        isOpen={isCheckoutOpen}
-        onClose={() => setIsCheckoutOpen(false)}
-      />
+
     </div>
   )
 }
