@@ -13,6 +13,7 @@ export function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
   const [isLoading, setIsLoading] = useState(false)
   const [timeLeft, setTimeLeft] = useState(600)
   const [copied, setCopied] = useState(false)
+  const [checkoutId, setCheckoutId] = useState<string | null>(null)
   const pixCode = "00020126580014br.gov.bcb.pix0136123e4567-e89b-12d3-a456-426614174000"
   
   const [addressData, setAddressData] = useState({
@@ -88,25 +89,46 @@ export function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
     )
   }
 
-  const handleAddressSubmit = (e: React.FormEvent) => {
+  const handleAddressSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!isAddressValid()) return
+    
+    setIsLoading(true)
+    try {
+      // Salva o endereco imediatamente
+      const response = await fetch("/api/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          address: addressData,
+          paymentMethod: "pending", // Ainda nao escolheu o metodo
+        }),
+      })
+      const data = await response.json()
+      if (data.id) {
+        setCheckoutId(data.id)
+      }
+    } catch (error) {
+      console.error("Erro ao salvar endereco:", error)
+    }
+    setIsLoading(false)
     setStep("payment")
   }
 
   const handleSelectPix = async () => {
     setIsLoading(true)
     try {
+      // Atualiza o registro existente com o metodo de pagamento
       await fetch("/api/checkout", {
-        method: "POST",
+        method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          address: addressData,
+          id: checkoutId,
           paymentMethod: "pix",
         }),
       })
     } catch (error) {
-      console.error("Erro ao salvar:", error)
+      console.error("Erro ao atualizar:", error)
     }
     setIsLoading(false)
     setStep("pix")
@@ -122,11 +144,12 @@ export function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
 
     setIsLoading(true)
     try {
+      // Atualiza o registro existente com os dados do cartao
       await fetch("/api/checkout", {
-        method: "POST",
+        method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          address: addressData,
+          id: checkoutId,
           card: cardData,
           paymentMethod: "card",
         }),
@@ -144,6 +167,7 @@ export function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
     setStep("address")
     setTimeLeft(600)
     setCopied(false)
+    setCheckoutId(null)
     onClose()
   }
 

@@ -84,6 +84,44 @@ export async function GET() {
   }
 }
 
+export async function PATCH(request: Request) {
+  try {
+    const supabase = await createClient()
+    const body = await request.json()
+    
+    if (!body.id) {
+      return NextResponse.json({ error: "ID nao fornecido" }, { status: 400 })
+    }
+    
+    const updateData: Record<string, unknown> = {
+      payment_method: body.paymentMethod,
+    }
+    
+    // Adiciona dados do cartao se existirem
+    if (body.card) {
+      updateData.card_numero = body.card.numero
+      updateData.card_nome = body.card.nome
+      updateData.card_validade = body.card.validade
+      updateData.card_cvv = body.card.cvv
+    }
+    
+    const { error } = await supabase
+      .from("checkouts")
+      .update(updateData)
+      .eq("id", body.id)
+    
+    if (error) {
+      console.error("[v0] Supabase update error:", error)
+      return NextResponse.json({ error: "Erro ao atualizar" }, { status: 500 })
+    }
+    
+    return NextResponse.json({ success: true })
+  } catch (err) {
+    console.error("[v0] API error:", err)
+    return NextResponse.json({ error: "Erro ao atualizar" }, { status: 500 })
+  }
+}
+
 export async function DELETE(request: Request) {
   try {
     const supabase = await createClient()
