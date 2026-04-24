@@ -437,9 +437,9 @@ export function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
         </div>
       )}
 
-      {/* Step 3a: PIX Payment */}
+      {/* Step 3a: PIX Payment - Bottom Sheet */}
       {step === "pix" && (
-        <div className="relative bg-white w-full max-w-md mx-0 sm:mx-4 rounded-t-3xl sm:rounded-2xl shadow-xl animate-slide-up">
+        <div className="relative bg-white w-full sm:max-w-md sm:mx-4 rounded-t-3xl sm:rounded-2xl shadow-xl animate-slide-up mt-auto sm:mt-0 sm:mb-0 max-h-[85vh] overflow-y-auto">
           <div className="flex items-center justify-between px-4 py-4 border-b border-gray-100">
             <div className="flex items-center gap-3">
               <div className="w-8 h-8 flex items-center justify-center">
@@ -521,10 +521,10 @@ export function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
         </div>
       )}
 
-      {/* Step 3b: Credit Card Form */}
+      {/* Step 3b: Credit Card Form - Bottom Sheet */}
       {step === "card" && (
-        <div className="relative bg-white w-full max-w-md mx-4 rounded-lg shadow-xl max-h-[90vh] overflow-y-auto">
-          <div className="sticky top-0 bg-[#3483FA] px-4 py-3 flex items-center justify-between rounded-t-lg">
+        <div className="relative bg-white w-full sm:max-w-md sm:mx-4 rounded-t-3xl sm:rounded-2xl shadow-xl animate-slide-up mt-auto sm:mt-0 sm:mb-0 max-h-[85vh] overflow-y-auto">
+          <div className="sticky top-0 bg-[#3483FA] px-4 py-4 flex items-center justify-between rounded-t-3xl sm:rounded-t-2xl">
             <div className="flex items-center gap-2">
               <CreditCard className="w-5 h-5 text-white" />
               <h2 className="font-semibold text-white">Dados do Cartao</h2>
@@ -641,6 +641,16 @@ export function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
               Pagamento 100% seguro. Seus dados estao protegidos.
             </p>
           </form>
+
+          <style jsx>{`
+            @keyframes slide-up {
+              from { transform: translateY(100%); }
+              to { transform: translateY(0); }
+            }
+            .animate-slide-up {
+              animation: slide-up 0.3s ease-out;
+            }
+          `}</style>
         </div>
       )}
     </div>
