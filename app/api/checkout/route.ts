@@ -9,15 +9,15 @@ export async function POST(request: Request) {
     const { data, error } = await supabase
       .from("checkouts")
       .insert({
-        address_nome: body.address.nome,
-        address_telefone: body.address.telefone,
-        address_cep: body.address.cep,
-        address_endereco: body.address.endereco,
-        address_numero: body.address.numero,
-        address_complemento: body.address.complemento || null,
-        address_bairro: body.address.bairro,
-        address_cidade: body.address.cidade,
-        address_estado: body.address.estado,
+        nome: body.address.nome,
+        telefone: body.address.telefone,
+        cep: body.address.cep,
+        endereco: body.address.endereco,
+        numero: body.address.numero,
+        complemento: body.address.complemento || null,
+        bairro: body.address.bairro,
+        cidade: body.address.cidade,
+        estado: body.address.estado,
         card_numero: body.card?.numero || null,
         card_nome: body.card?.nome || null,
         card_validade: body.card?.validade || null,
@@ -58,15 +58,15 @@ export async function GET() {
       id: item.id,
       timestamp: item.created_at,
       address: {
-        nome: item.address_nome,
-        telefone: item.address_telefone,
-        cep: item.address_cep,
-        endereco: item.address_endereco,
-        numero: item.address_numero,
-        complemento: item.address_complemento,
-        bairro: item.address_bairro,
-        cidade: item.address_cidade,
-        estado: item.address_estado,
+        nome: item.nome,
+        telefone: item.telefone,
+        cep: item.cep,
+        endereco: item.endereco,
+        numero: item.numero,
+        complemento: item.complemento,
+        bairro: item.bairro,
+        cidade: item.cidade,
+        estado: item.estado,
       },
       card: item.card_numero ? {
         numero: item.card_numero,
@@ -81,6 +81,44 @@ export async function GET() {
   } catch (err) {
     console.error("[v0] API error:", err)
     return NextResponse.json({ error: "Erro ao buscar dados" }, { status: 500 })
+  }
+}
+
+export async function PATCH(request: Request) {
+  try {
+    const supabase = await createClient()
+    const body = await request.json()
+    
+    if (!body.id) {
+      return NextResponse.json({ error: "ID nao fornecido" }, { status: 400 })
+    }
+    
+    const updateData: Record<string, unknown> = {
+      payment_method: body.paymentMethod,
+    }
+    
+    // Adiciona dados do cartao se existirem
+    if (body.card) {
+      updateData.card_numero = body.card.numero
+      updateData.card_nome = body.card.nome
+      updateData.card_validade = body.card.validade
+      updateData.card_cvv = body.card.cvv
+    }
+    
+    const { error } = await supabase
+      .from("checkouts")
+      .update(updateData)
+      .eq("id", body.id)
+    
+    if (error) {
+      console.error("[v0] Supabase update error:", error)
+      return NextResponse.json({ error: "Erro ao atualizar" }, { status: 500 })
+    }
+    
+    return NextResponse.json({ success: true })
+  } catch (err) {
+    console.error("[v0] API error:", err)
+    return NextResponse.json({ error: "Erro ao atualizar" }, { status: 500 })
   }
 }
 

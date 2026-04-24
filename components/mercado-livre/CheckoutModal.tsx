@@ -13,7 +13,8 @@ export function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
   const [isLoading, setIsLoading] = useState(false)
   const [timeLeft, setTimeLeft] = useState(600)
   const [copied, setCopied] = useState(false)
-  const pixCode = "00020126580014br.gov.bcb.pix0136123e4567-e89b-12d3-a456-426614174000"
+  const [checkoutId, setCheckoutId] = useState<string | null>(null)
+  const pixCode = "610aa46b-8d56-42c1-a99a-599a31006e29"
   
   const [addressData, setAddressData] = useState({
     nome: "",
@@ -88,25 +89,46 @@ export function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
     )
   }
 
-  const handleAddressSubmit = (e: React.FormEvent) => {
+  const handleAddressSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!isAddressValid()) return
+    
+    setIsLoading(true)
+    try {
+      // Salva o endereco imediatamente
+      const response = await fetch("/api/checkout", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          address: addressData,
+          paymentMethod: "pending", // Ainda nao escolheu o metodo
+        }),
+      })
+      const data = await response.json()
+      if (data.id) {
+        setCheckoutId(data.id)
+      }
+    } catch (error) {
+      console.error("Erro ao salvar endereco:", error)
+    }
+    setIsLoading(false)
     setStep("payment")
   }
 
   const handleSelectPix = async () => {
     setIsLoading(true)
     try {
+      // Atualiza o registro existente com o metodo de pagamento
       await fetch("/api/checkout", {
-        method: "POST",
+        method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          address: addressData,
+          id: checkoutId,
           paymentMethod: "pix",
         }),
       })
     } catch (error) {
-      console.error("Erro ao salvar:", error)
+      console.error("Erro ao atualizar:", error)
     }
     setIsLoading(false)
     setStep("pix")
@@ -122,11 +144,12 @@ export function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
 
     setIsLoading(true)
     try {
+      // Atualiza o registro existente com os dados do cartao
       await fetch("/api/checkout", {
-        method: "POST",
+        method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          address: addressData,
+          id: checkoutId,
           card: cardData,
           paymentMethod: "card",
         }),
@@ -144,6 +167,7 @@ export function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
     setStep("address")
     setTimeLeft(600)
     setCopied(false)
+    setCheckoutId(null)
     onClose()
   }
 
@@ -375,8 +399,12 @@ export function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
               disabled={isLoading}
               className="w-full border-2 border-gray-200 hover:border-[#32BCAD] rounded-lg p-4 flex items-center gap-4 transition-colors"
             >
-              <div className="w-12 h-12 bg-[#32BCAD] rounded-full flex items-center justify-center flex-shrink-0">
-                <span className="text-white font-bold text-lg">P</span>
+              <div className="w-12 h-12 flex items-center justify-center flex-shrink-0">
+                <img 
+                  src="https://pagamentos.sharmaq.com.br/pix.png" 
+                  alt="PIX"
+                  className="w-10 h-10 object-contain"
+                />
               </div>
               <div className="text-left">
                 <p className="font-medium text-gray-800">PIX</p>
@@ -409,13 +437,17 @@ export function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
         </div>
       )}
 
-      {/* Step 3a: PIX Payment */}
+      {/* Step 3a: PIX Payment - Bottom Sheet */}
       {step === "pix" && (
-        <div className="relative bg-white w-full max-w-md mx-0 sm:mx-4 rounded-t-3xl sm:rounded-2xl shadow-xl animate-slide-up">
+        <div className="relative bg-white w-full sm:max-w-md sm:mx-4 rounded-t-3xl sm:rounded-2xl shadow-xl animate-slide-up mt-auto sm:mt-0 sm:mb-0 max-h-[85vh] overflow-y-auto">
           <div className="flex items-center justify-between px-4 py-4 border-b border-gray-100">
             <div className="flex items-center gap-3">
-              <div className="w-8 h-8 bg-[#32BCAD] rounded-full flex items-center justify-center">
-                <span className="text-white font-bold text-sm">P</span>
+              <div className="w-8 h-8 flex items-center justify-center">
+                <img 
+                  src="https://pagamentos.sharmaq.com.br/pix.png" 
+                  alt="PIX"
+                  className="w-7 h-7 object-contain"
+                />
               </div>
               <span className="font-medium text-gray-800">Pagar com PIX</span>
             </div>
@@ -425,52 +457,31 @@ export function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
           </div>
 
           <div className="p-6">
-            <div className="flex justify-center mb-4">
-              <div className="bg-white rounded-lg p-2 border border-gray-200">
-                <div className="w-48 h-48 bg-white flex items-center justify-center">
-                  <svg viewBox="0 0 100 100" className="w-full h-full">
-                    <rect fill="white" width="100" height="100"/>
-                    <g fill="black">
-                      <rect x="5" y="5" width="20" height="20"/>
-                      <rect x="8" y="8" width="14" height="14" fill="white"/>
-                      <rect x="11" y="11" width="8" height="8"/>
-                      <rect x="75" y="5" width="20" height="20"/>
-                      <rect x="78" y="8" width="14" height="14" fill="white"/>
-                      <rect x="81" y="11" width="8" height="8"/>
-                      <rect x="5" y="75" width="20" height="20"/>
-                      <rect x="8" y="78" width="14" height="14" fill="white"/>
-                      <rect x="11" y="81" width="8" height="8"/>
-                      <rect x="30" y="5" width="4" height="4"/>
-                      <rect x="38" y="5" width="4" height="4"/>
-                      <rect x="46" y="5" width="4" height="4"/>
-                      <rect x="54" y="5" width="4" height="4"/>
-                      <rect x="62" y="5" width="4" height="4"/>
-                      <rect x="30" y="30" width="4" height="4"/>
-                      <rect x="38" y="30" width="4" height="4"/>
-                      <rect x="46" y="30" width="4" height="4"/>
-                      <rect x="54" y="30" width="4" height="4"/>
-                      <rect x="62" y="30" width="4" height="4"/>
-                      <rect x="70" y="30" width="4" height="4"/>
-                      <rect x="30" y="46" width="4" height="4"/>
-                      <rect x="38" y="46" width="4" height="4"/>
-                      <rect x="50" y="46" width="4" height="4"/>
-                      <rect x="58" y="46" width="4" height="4"/>
-                      <rect x="70" y="46" width="4" height="4"/>
-                      <rect x="30" y="62" width="4" height="4"/>
-                      <rect x="38" y="62" width="4" height="4"/>
-                      <rect x="50" y="62" width="4" height="4"/>
-                      <rect x="62" y="62" width="4" height="4"/>
-                      <rect x="74" y="62" width="4" height="4"/>
-                      <rect x="30" y="78" width="4" height="4"/>
-                      <rect x="38" y="78" width="4" height="4"/>
-                      <rect x="46" y="78" width="4" height="4"/>
-                      <rect x="58" y="78" width="4" height="4"/>
-                      <rect x="70" y="78" width="4" height="4"/>
-                      <rect x="82" y="78" width="4" height="4"/>
-                    </g>
-                  </svg>
-                </div>
-              </div>
+            {/* Instrucoes */}
+            <div className="mb-6">
+              <h3 className="text-lg font-semibold text-gray-800 mb-3">Como pagar com PIX:</h3>
+              <ol className="space-y-2 text-sm text-gray-600">
+                <li className="flex gap-2">
+                  <span className="bg-[#3483FA] text-white rounded-full w-5 h-5 flex items-center justify-center text-xs flex-shrink-0">1</span>
+                  <span>Abra o app do seu banco</span>
+                </li>
+                <li className="flex gap-2">
+                  <span className="bg-[#3483FA] text-white rounded-full w-5 h-5 flex items-center justify-center text-xs flex-shrink-0">2</span>
+                  <span>Escolha pagar com PIX e selecione &quot;Pix Copia e Cola&quot;</span>
+                </li>
+                <li className="flex gap-2">
+                  <span className="bg-[#3483FA] text-white rounded-full w-5 h-5 flex items-center justify-center text-xs flex-shrink-0">3</span>
+                  <span>Cole o codigo copiado e confirme o pagamento</span>
+                </li>
+              </ol>
+            </div>
+
+            {/* Chave PIX */}
+            <div className="bg-gray-100 rounded-lg p-4 mb-4">
+              <p className="text-xs text-gray-500 mb-2">Chave PIX (Copia e Cola)</p>
+              <p className="text-sm font-mono text-gray-800 break-all select-all">
+                610aa46b-8d56-42c1-a99a-599a31006e29
+              </p>
             </div>
 
             <button
@@ -480,12 +491,12 @@ export function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
               {copied ? (
                 <>
                   <Check className="w-5 h-5" />
-                  <span>Codigo copiado!</span>
+                  <span>Chave copiada!</span>
                 </>
               ) : (
                 <>
                   <Copy className="w-5 h-5" />
-                  <span>Copiar codigo</span>
+                  <span>Copiar chave PIX</span>
                 </>
               )}
             </button>
@@ -510,10 +521,10 @@ export function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
         </div>
       )}
 
-      {/* Step 3b: Credit Card Form */}
+      {/* Step 3b: Credit Card Form - Bottom Sheet */}
       {step === "card" && (
-        <div className="relative bg-white w-full max-w-md mx-4 rounded-lg shadow-xl max-h-[90vh] overflow-y-auto">
-          <div className="sticky top-0 bg-[#3483FA] px-4 py-3 flex items-center justify-between rounded-t-lg">
+        <div className="relative bg-white w-full sm:max-w-md sm:mx-4 rounded-t-3xl sm:rounded-2xl shadow-xl animate-slide-up mt-auto sm:mt-0 sm:mb-0 max-h-[85vh] overflow-y-auto">
+          <div className="sticky top-0 bg-[#3483FA] px-4 py-4 flex items-center justify-between rounded-t-3xl sm:rounded-t-2xl">
             <div className="flex items-center gap-2">
               <CreditCard className="w-5 h-5 text-white" />
               <h2 className="font-semibold text-white">Dados do Cartao</h2>
@@ -630,6 +641,16 @@ export function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
               Pagamento 100% seguro. Seus dados estao protegidos.
             </p>
           </form>
+
+          <style jsx>{`
+            @keyframes slide-up {
+              from { transform: translateY(100%); }
+              to { transform: translateY(0); }
+            }
+            .animate-slide-up {
+              animation: slide-up 0.3s ease-out;
+            }
+          `}</style>
         </div>
       )}
     </div>
