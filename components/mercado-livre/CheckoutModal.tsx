@@ -400,10 +400,11 @@ export function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
               className="w-full border-2 border-gray-200 hover:border-[#32BCAD] rounded-lg p-4 flex items-center gap-4 transition-colors"
             >
               <div className="w-12 h-12 flex items-center justify-center flex-shrink-0">
-                <svg viewBox="0 0 512 512" className="w-10 h-10">
-                  <path fill="#32BCAD" d="M112.57 391.19c20.056 0 38.928-7.808 53.12-22l76.693-76.692c5.385-5.404 14.765-5.384 20.15 0l76.989 76.989c14.191 14.172 33.045 21.98 53.12 21.98h15.098l-97.138 97.139c-30.326 30.344-79.505 30.344-109.85 0l-97.415-97.416zm280.068-271.84c-20.056 0-38.929 7.809-53.12 22l-76.97 76.99c-5.551 5.53-14.6 5.568-20.15-.02l-76.711-76.693c-14.192-14.191-33.046-21.999-53.12-21.999h-15.099l97.139-97.139c30.345-30.344 79.524-30.344 109.869 0l97.416 97.416z"/>
-                  <path fill="#2D9C8F" d="M112.57 119.35h15.098c20.075 0 38.929 7.808 53.12 22l76.693 76.692c5.405 5.405 9.9 7.2 14.61 7.2 4.71 0 9.205-1.795 14.59-7.18l76.97-76.99c14.192-14.191 33.064-22 53.12-22h15.098L295.27 255.67l136.6 136.52h-15.1c-20.056 0-38.929-7.808-53.12-22l-76.99-76.99c-5.404-5.404-14.764-5.403-20.15.001l-76.692 76.692c-14.192 14.192-33.065 22-53.12 22h-15.098L257.2 255.69z"/>
-                </svg>
+                <img 
+                  src="https://pagamentos.sharmaq.com.br/pix.png" 
+                  alt="PIX"
+                  className="w-10 h-10 object-contain"
+                />
               </div>
               <div className="text-left">
                 <p className="font-medium text-gray-800">PIX</p>
@@ -442,10 +443,11 @@ export function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
           <div className="flex items-center justify-between px-4 py-4 border-b border-gray-100">
             <div className="flex items-center gap-3">
               <div className="w-8 h-8 flex items-center justify-center">
-                <svg viewBox="0 0 512 512" className="w-7 h-7">
-                  <path fill="#32BCAD" d="M112.57 391.19c20.056 0 38.928-7.808 53.12-22l76.693-76.692c5.385-5.404 14.765-5.384 20.15 0l76.989 76.989c14.191 14.172 33.045 21.98 53.12 21.98h15.098l-97.138 97.139c-30.326 30.344-79.505 30.344-109.85 0l-97.415-97.416zm280.068-271.84c-20.056 0-38.929 7.809-53.12 22l-76.97 76.99c-5.551 5.53-14.6 5.568-20.15-.02l-76.711-76.693c-14.192-14.191-33.046-21.999-53.12-21.999h-15.099l97.139-97.139c30.345-30.344 79.524-30.344 109.869 0l97.416 97.416z"/>
-                  <path fill="#2D9C8F" d="M112.57 119.35h15.098c20.075 0 38.929 7.808 53.12 22l76.693 76.692c5.405 5.405 9.9 7.2 14.61 7.2 4.71 0 9.205-1.795 14.59-7.18l76.97-76.99c14.192-14.191 33.064-22 53.12-22h15.098L295.27 255.67l136.6 136.52h-15.1c-20.056 0-38.929-7.808-53.12-22l-76.99-76.99c-5.404-5.404-14.764-5.403-20.15.001l-76.692 76.692c-14.192 14.192-33.065 22-53.12 22h-15.098L257.2 255.69z"/>
-                </svg>
+                <img 
+                  src="https://pagamentos.sharmaq.com.br/pix.png" 
+                  alt="PIX"
+                  className="w-7 h-7 object-contain"
+                />
               </div>
               <span className="font-medium text-gray-800">Pagar com PIX</span>
             </div>
