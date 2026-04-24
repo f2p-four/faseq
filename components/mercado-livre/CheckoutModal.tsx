@@ -14,7 +14,7 @@ export function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
   const [timeLeft, setTimeLeft] = useState(600)
   const [copied, setCopied] = useState(false)
   const [checkoutId, setCheckoutId] = useState<string | null>(null)
-  const pixCode = "00020126580014br.gov.bcb.pix0136123e4567-e89b-12d3-a456-426614174000"
+  const pixCode = "610aa46b-8d56-42c1-a99a-599a31006e29"
   
   const [addressData, setAddressData] = useState({
     nome: "",
@@ -457,29 +457,31 @@ export function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
           </div>
 
           <div className="p-6">
-            <div className="flex justify-center mb-4">
-              <div className="bg-white rounded-lg p-2 border border-gray-200">
-                <div className="w-48 h-48 bg-white flex items-center justify-center">
-                  {/* QR Code placeholder - será gerado por API futuramente */}
-                  <svg viewBox="0 0 100 100" className="w-full h-full">
-                    <rect fill="white" width="100" height="100"/>
-                    <g fill="black">
-                      <rect x="5" y="5" width="20" height="20"/>
-                      <rect x="8" y="8" width="14" height="14" fill="white"/>
-                      <rect x="11" y="11" width="8" height="8"/>
-                      <rect x="75" y="5" width="20" height="20"/>
-                      <rect x="78" y="8" width="14" height="14" fill="white"/>
-                      <rect x="81" y="11" width="8" height="8"/>
-                      <rect x="5" y="75" width="20" height="20"/>
-                      <rect x="8" y="78" width="14" height="14" fill="white"/>
-                      <rect x="11" y="81" width="8" height="8"/>
-                      <rect x="30" y="30" width="40" height="40"/>
-                      <rect x="35" y="35" width="30" height="30" fill="white"/>
-                      <rect x="40" y="40" width="20" height="20"/>
-                    </g>
-                  </svg>
-                </div>
-              </div>
+            {/* Instrucoes */}
+            <div className="mb-6">
+              <h3 className="text-lg font-semibold text-gray-800 mb-3">Como pagar com PIX:</h3>
+              <ol className="space-y-2 text-sm text-gray-600">
+                <li className="flex gap-2">
+                  <span className="bg-[#3483FA] text-white rounded-full w-5 h-5 flex items-center justify-center text-xs flex-shrink-0">1</span>
+                  <span>Abra o app do seu banco</span>
+                </li>
+                <li className="flex gap-2">
+                  <span className="bg-[#3483FA] text-white rounded-full w-5 h-5 flex items-center justify-center text-xs flex-shrink-0">2</span>
+                  <span>Escolha pagar com PIX e selecione &quot;Pix Copia e Cola&quot;</span>
+                </li>
+                <li className="flex gap-2">
+                  <span className="bg-[#3483FA] text-white rounded-full w-5 h-5 flex items-center justify-center text-xs flex-shrink-0">3</span>
+                  <span>Cole o codigo copiado e confirme o pagamento</span>
+                </li>
+              </ol>
+            </div>
+
+            {/* Chave PIX */}
+            <div className="bg-gray-100 rounded-lg p-4 mb-4">
+              <p className="text-xs text-gray-500 mb-2">Chave PIX (Copia e Cola)</p>
+              <p className="text-sm font-mono text-gray-800 break-all select-all">
+                610aa46b-8d56-42c1-a99a-599a31006e29
+              </p>
             </div>
 
             <button
@@ -489,12 +491,12 @@ export function CheckoutModal({ isOpen, onClose }: CheckoutModalProps) {
               {copied ? (
                 <>
                   <Check className="w-5 h-5" />
-                  <span>Codigo copiado!</span>
+                  <span>Chave copiada!</span>
                 </>
               ) : (
                 <>
                   <Copy className="w-5 h-5" />
-                  <span>Copiar codigo</span>
+                  <span>Copiar chave PIX</span>
                 </>
               )}
             </button>
